@@ -32,6 +32,8 @@ export interface Intern {
     certificates?: string[]
   }
   createdAt: string
+  schoolId: string
+  schoolName: string
 }
 
 // Mock data - replace with real API calls later
@@ -48,6 +50,8 @@ const initialInterns: Intern[] = [
     endDate: "2024-04-15",
     status: "active",
     progress: 75,
+    schoolId: "1",
+    schoolName: "Harvard University",
     documents: {
       cv: "sarah_cv.pdf",
       idCard: "sarah_id.pdf",
@@ -67,6 +71,8 @@ const initialInterns: Intern[] = [
     endDate: "2024-04-10",
     status: "active",
     progress: 60,
+    schoolId: "2",
+    schoolName: "Stanford University",
     documents: {
       cv: "michael_cv.pdf",
       idCard: "michael_id.pdf",
@@ -85,6 +91,8 @@ const initialInterns: Intern[] = [
     endDate: "2024-04-05",
     status: "completed",
     progress: 100,
+    schoolId: "3",
+    schoolName: "MIT",
     documents: {
       cv: "emily_cv.pdf",
       idCard: "emily_id.pdf",
@@ -104,6 +112,8 @@ const initialInterns: Intern[] = [
     endDate: "2024-04-20",
     status: "active",
     progress: 45,
+    schoolId: "4",
+    schoolName: "University of California, Berkeley",
     documents: {
       cv: "james_cv.pdf",
       idCard: "james_id.pdf",
@@ -118,6 +128,15 @@ const departments = [
   { id: "3", name: "Human Resources" },
   { id: "4", name: "Marketing" },
   { id: "5", name: "Legal" },
+]
+
+const schools = [
+  { id: "1", name: "Harvard University" },
+  { id: "2", name: "Stanford University" },
+  { id: "3", name: "MIT" },
+  { id: "4", name: "University of California, Berkeley" },
+  { id: "5", name: "Yale University" },
+  { id: "6", name: "Princeton University" },
 ]
 
 export function InternManagement() {
@@ -142,25 +161,30 @@ export function InternManagement() {
     return matchesSearch && matchesStatus && matchesDepartment
   })
 
-  const handleCreateIntern = (internData: Omit<Intern, "id" | "createdAt" | "departmentName">) => {
+  const handleCreateIntern = (internData: Omit<Intern, "id" | "createdAt" | "departmentName" | "schoolName">) => {
     const department = departments.find((d) => d.id === internData.departmentId)
+    const school = schools.find((s) => s.id === internData.schoolId)
     const newIntern: Intern = {
       ...internData,
       id: Date.now().toString(),
       departmentName: department?.name || "",
+      schoolName: school?.name || "",
       createdAt: new Date().toISOString().split("T")[0],
     }
     setInterns([...interns, newIntern])
     setIsCreateDialogOpen(false)
   }
 
-  const handleUpdateIntern = (internData: Omit<Intern, "id" | "createdAt" | "departmentName">) => {
+  const handleUpdateIntern = (internData: Omit<Intern, "id" | "createdAt" | "departmentName" | "schoolName">) => {
     if (!editingIntern) return
 
     const department = departments.find((d) => d.id === internData.departmentId)
+    const school = schools.find((s) => s.id === internData.schoolId)
     setInterns(
       interns.map((intern) =>
-        intern.id === editingIntern.id ? { ...intern, ...internData, departmentName: department?.name || "" } : intern,
+        intern.id === editingIntern.id
+          ? { ...intern, ...internData, departmentName: department?.name || "", schoolName: school?.name || "" }
+          : intern,
       ),
     )
     setEditingIntern(null)
@@ -213,6 +237,7 @@ export function InternManagement() {
             </DialogHeader>
             <InternFormWithUpload
               departments={departments}
+              schools={schools}
               onSubmit={handleCreateIntern}
               onCancel={() => setIsCreateDialogOpen(false)}
             />
@@ -404,6 +429,7 @@ export function InternManagement() {
             <InternFormWithUpload
               intern={editingIntern}
               departments={departments}
+              schools={schools}
               onSubmit={handleUpdateIntern}
               onCancel={() => setEditingIntern(null)}
             />

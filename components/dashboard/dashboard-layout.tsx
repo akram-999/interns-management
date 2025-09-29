@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Users, Building2, LayoutDashboard, Menu, LogOut, User, FileText, Camera } from "lucide-react"
+import { Users, Building2, LayoutDashboard, Menu, LogOut, User, FileText, Camera, GraduationCap } from "lucide-react"
 import { logout, getCurrentUser } from "@/lib/auth"
 import { NotificationSystem } from "@/components/notifications/notification-system"
 
@@ -32,9 +32,9 @@ const navigation = [
     icon: Users,
   },
   {
-    name: "Activities",
-    href: "/dashboard/activities",
-    icon: Camera,
+    name: "Schools",
+    href: "/dashboard/schools",
+    icon: GraduationCap,
   },
   {
     name: "Certificates",

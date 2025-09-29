@@ -14,17 +14,19 @@ import type { Intern } from "./intern-management"
 interface InternFormProps {
   intern?: Intern
   departments: { id: string; name: string }[]
+  schools: { id: string; name: string }[] // Added schools prop
   onSubmit: (data: Omit<Intern, "id" | "createdAt" | "departmentName">) => void
   onCancel: () => void
 }
 
-export function InternForm({ intern, departments, onSubmit, onCancel }: InternFormProps) {
+export function InternForm({ intern, departments, schools, onSubmit, onCancel }: InternFormProps) {
   const [formData, setFormData] = useState({
     name: intern?.name || "",
     email: intern?.email || "",
     phone: intern?.phone || "",
     address: intern?.address || "",
     departmentId: intern?.departmentId || "",
+    schoolId: intern?.schoolId || "", // Added schoolId field
     startDate: intern?.startDate || "",
     endDate: intern?.endDate || "",
     status: intern?.status || ("active" as "active" | "completed" | "terminated"),
@@ -110,13 +112,31 @@ export function InternForm({ intern, departments, onSubmit, onCancel }: InternFo
         </CardContent>
       </Card>
 
-      {/* Training Information */}
+      {/* Educational & Training Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Training Information</CardTitle>
+          <CardTitle className="text-lg">Educational & Training Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="school">School</Label>
+              <Select
+                value={formData.schoolId}
+                onValueChange={(value) => setFormData({ ...formData, schoolId: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select school" />
+                </SelectTrigger>
+                <SelectContent>
+                  {schools.map((school) => (
+                    <SelectItem key={school.id} value={school.id}>
+                      {school.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
               <Select
@@ -135,6 +155,9 @@ export function InternForm({ intern, departments, onSubmit, onCancel }: InternFo
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select
@@ -153,9 +176,21 @@ export function InternForm({ intern, departments, onSubmit, onCancel }: InternFo
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="progress">Progress (%)</Label>
+              <Input
+                id="progress"
+                type="number"
+                min="0"
+                max="100"
+                value={formData.progress}
+                onChange={(e) => setFormData({ ...formData, progress: Number.parseInt(e.target.value) || 0 })}
+                required
+              />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
               <Input
@@ -173,18 +208,6 @@ export function InternForm({ intern, departments, onSubmit, onCancel }: InternFo
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="progress">Progress (%)</Label>
-              <Input
-                id="progress"
-                type="number"
-                min="0"
-                max="100"
-                value={formData.progress}
-                onChange={(e) => setFormData({ ...formData, progress: Number.parseInt(e.target.value) || 0 })}
                 required
               />
             </div>
