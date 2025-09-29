@@ -7,8 +7,9 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Users, Building2, LayoutDashboard, Menu, LogOut, User, FileText } from "lucide-react"
+import { Users, Building2, LayoutDashboard, Menu, LogOut, User, FileText, Camera } from "lucide-react"
 import { logout, getCurrentUser } from "@/lib/auth"
+import { NotificationSystem } from "@/components/notifications/notification-system"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -29,6 +30,11 @@ const navigation = [
     name: "Interns",
     href: "/dashboard/interns",
     icon: Users,
+  },
+  {
+    name: "Activities",
+    href: "/dashboard/activities",
+    icon: Camera,
   },
   {
     name: "Certificates",
@@ -136,6 +142,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Main content */}
       <div className="md:pl-64">
+        <div className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6 md:px-8">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" className="md:hidden" size="icon" onClick={() => setSidebarOpen(true)}>
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg font-semibold">Interns Management System</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <NotificationSystem />
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+                <User className="h-4 w-4 text-primary-foreground" />
+              </div>
+              <span className="text-sm font-medium">{user?.name}</span>
+            </div>
+          </div>
+        </div>
         <main className="py-6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">{children}</div>
         </main>

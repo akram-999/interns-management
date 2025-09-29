@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Building2, GraduationCap, FileText } from "lucide-react"
+import { TrainingAlerts } from "@/components/notifications/training-alerts"
 
 // Mock data - replace with real data later
 const stats = [
@@ -66,6 +67,30 @@ const recentInterns = [
   },
 ]
 
+const mockInternsForAlerts = [
+  {
+    id: "1",
+    name: "Sarah Johnson",
+    departmentName: "Information Technology",
+    endDate: "2024-12-31", // 3 days from now (adjust based on current date)
+    status: "active" as const,
+  },
+  {
+    id: "2",
+    name: "Michael Chen",
+    departmentName: "Finance",
+    endDate: "2024-12-30", // 2 days from now
+    status: "active" as const,
+  },
+  {
+    id: "4",
+    name: "James Wilson",
+    departmentName: "Marketing",
+    endDate: "2024-12-27", // Overdue
+    status: "active" as const,
+  },
+]
+
 export function DashboardOverview() {
   return (
     <div className="space-y-6">
@@ -73,6 +98,8 @@ export function DashboardOverview() {
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground">Welcome to the Interns Management System</p>
       </div>
+
+      <TrainingAlerts interns={mockInternsForAlerts} />
 
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
