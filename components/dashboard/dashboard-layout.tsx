@@ -36,12 +36,6 @@ const navigation = [
     href: "/dashboard/schools",
     icon: GraduationCap,
   },
-
-  {
-    name: "Activities",
-    href: "/dashboard/activities",
-    icon: Camera,
-  },
   {
     name: "Certificates",
     href: "/dashboard/certificates",
